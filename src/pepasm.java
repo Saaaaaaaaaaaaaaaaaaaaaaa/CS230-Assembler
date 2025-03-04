@@ -15,23 +15,13 @@ public class pepasm {
         OPCODES.put("LDWA", "C1");
         OPCODES.put("STWA", "E1");
         OPCODES.put("ANDA", "81");
-        //OPCODES.put("ASLA", "48");
+        //OPCODES.put("ASLA", "48"); COULDN'T FIGURE OUT THESE 2
         //OPCODES.put("ASRA", "47");
-        OPCODES.put("STOP", "00");
         OPCODES.put("CPBA", "B1");
         OPCODES.put("BRNE", "1A");
+        OPCODES.put("STOP", "00");
         OPCODES.put(".END", "zz");
     }
-
-    public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Usage: java pepasm.java file.pep");
-            return;
-        }
-        String filePath = args[0];
-        readFile(filePath);
-    }
-
 
     public static void readFile(String filePath) {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -42,7 +32,8 @@ public class pepasm {
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
                 line = line.trim();
-                if (line.isEmpty() || line.startsWith(".")) continue; // Ignore empty lines and directives
+                if (line.isEmpty() || line.startsWith("."))
+                    continue; // IGNORE EMPTY LINES
 
                 String[] parts = line.split(" ");
                 String instruction = parts[0];
@@ -51,37 +42,33 @@ public class pepasm {
                     System.err.println("Unknown instruction: " + instruction);
                     continue;
                 }
-
                 String opcode = OPCODES.get(instruction);
 
-                // STOP instruction (no operands)
                 if (instruction.equals("STOP")) {
                     machineCode.add(opcode);
                     continue;
                 }
-
                 if (parts.length != 3) {
                     System.err.println("Invalid instruction format: " + line);
                     continue;
                 }
 
-                String operand = parts[1].replace(",", ""); // Remove comma
+                String operand = parts[1].replace(",", "");//GETS RID OF COMMA
                 String addressingMode = parts[2];
 
-                //
-                String addressModeBit = (addressingMode.equals("i")) ? "i" : "d";
+                //GETS RID OF "0x"
                 String operandHex = operand.replace("0x", "").toUpperCase();
 
-                // Ensure operand is 4 digits (word-aligned)
+                // MAKS SURE HEX IS 4 CHARACTERS LONG
                 while (operandHex.length() < 4) {
                     operandHex = "0" + operandHex;
                 }
 
-                // Object code layout
-                machineCode.add(opcode + " " + operandHex + " " + addressModeBit);
+                // LAYOUT FOR OBJECT CODE
+                machineCode.add(opcode + " " + operandHex + " ");
             }
 
-            // Print the Object code
+            // PRINT THE OBJECT CODE
             System.out.println("\nObject Code:");
             for (String code : machineCode) {
                 System.out.println(code);
@@ -91,8 +78,14 @@ public class pepasm {
         catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }
-
     }
 
-
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Usage: java pepasm.java file.pep");
+            return;
+        }
+        String filePath = args[0];
+        readFile(filePath);
+    }
 }
