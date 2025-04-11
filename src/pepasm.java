@@ -12,12 +12,13 @@ public class pepasm {
     static {
         OPCODES.put("LDBA", "D0");
         OPCODES.put("STBA", "F1");
-        OPCODES.put("LDWA", "C1");
+        OPCODES.put("LDWA", "C0");
         OPCODES.put("STWA", "E1");
         OPCODES.put("ANDA", "81");
-        //OPCODES.put("ASLA", "48"); COULDN'T FIGURE OUT THESE 2
-        //OPCODES.put("ASRA", "47");
-        OPCODES.put("CPBA", "B1");
+        OPCODES.put("ASLA", "0A");
+        OPCODES.put("ADDA", "60");
+        OPCODES.put("ASRA", "0C");
+        OPCODES.put("CPBA", "B0");
         OPCODES.put("BRNE", "1A");
         OPCODES.put("STOP", "00");
         OPCODES.put(".END", "zz");
